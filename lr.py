@@ -10,7 +10,7 @@ import math
 # y_M is a matrix of stars (each row corresponding to one data point, each col represents one class:5)
 # W is the parameter matrix <feature_num:2000, class_num:5>
 def lr_train_param(x_M, y_M, W, eval_x_M, eval_y_M, lmd, alpha, threshold, method, batch_size):
-    n = x_M.get_shape()[0]    # total number of data points
+    n = x_M.get_shape()[0]    # total number of training data points
     c = W.shape[1]            # total number of classes
 
     # ====== / testing start / ====== #

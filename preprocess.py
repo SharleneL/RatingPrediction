@@ -79,14 +79,13 @@ def get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac):
     # stars_M = csr_matrix((stars_data, (stars_row, stars_col)), shape=(line_num, class_num))
     # return review_list, stars_list, stars_M
 
-    return review_list, stars_list
+    return review_list, stars_list, line_num
 
 
-def print_analysis(review_list, eval_review_list):
+def print_analysis(review_list):
     # STEP3 - Calculate some statistics to verify your implementation.
     token_num_dic = dict()
     stars_list = [0, 0, 0, 0, 0, 0]
-    review_list = review_list + eval_review_list
     for review in review_list:
         stars = getattr(review, 'stars')
         stars_list[stars] += 1

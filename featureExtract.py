@@ -97,20 +97,101 @@ def gen_libsvm_file(review_list, stars_list, method, feature_num):
 
     # return feature_set, review_token_freq_dic_list
 
+# get the train & eval feature matrix: row - one review, col - token's index in feature dic, value - occurence frequency
+# def get_feature_M(feature_set, review_token_freq_dic_list):
+def get_feature_M(libsvm_file_path, total_data_amt, eval_data_frac, feature_num, class_num):
 
-# get the feature matrix: row - one review, col - token's index in feature dic, value - occurence frequency
-def get_feature_M_helper(feature_set, review_token_freq_dic_list):
-    row = []
-    col = []
-    data = []
-    for i in range(len(review_token_freq_dic_list)):  # each elem d in the list is a dict for one review
-        d = review_token_freq_dic_list[i]
-        feature_list = list(feature_set)
+    # train SET
+    # stars
+    train_stars_list = []     # list of stars for all reviews
+    train_stars_row = []      # review data index (AKA data's line number)
+    train_stars_col = []      # class 1~5
+    train_stars_data = []     # 1: current review's star = col+1  0: current review's star is not related to this col
+    # review features
+    train_review_row = []     # review data index (AKA data's line number)
+    train_review_col = []     # feature's index
+    train_review_data = []    # the frequency of <review_data_index, feature_index>
 
-        for token, freq in d.iteritems():
-            if token in feature_set:
-                row.append(i)
-                col.append(feature_list.index(token))
-                data.append(d[token])
-    M = csr_matrix((data, (row, col)), shape=(len(review_token_freq_dic_list), len(feature_set)))
-    return M
+    # eval SET
+    # stars
+    eval_stars_list = []     # list of stars for all reviews
+    eval_stars_row = []      # review data index (AKA data's line number)
+    eval_stars_col = []      # class 1~5
+    eval_stars_data = []     # 1: current review's star = col+1  0: current review's star is not related to this col
+    # review features
+    eval_review_row = []     # review data index (AKA data's line number)
+    eval_review_col = []     # feature's index
+    eval_review_data = []    # the frequency of <review_data_index, feature_index>
+
+    # split the data into train & eval parts
+    train_data_amt = int(round(total_data_amt * (1.0 - eval_data_frac)))
+
+    line_num = 0
+    with open(libsvm_file_path) as f:
+        line = f.readline().strip()
+        while line != '':
+            # split into training set
+            arr = line.split()
+            if line_num < train_data_amt:
+                # update stars
+                stars = int(arr[0])
+                train_stars_list.append(stars)
+                # star matrix
+                train_stars_col.append(stars-1)
+                train_stars_row.append(line_num)
+                train_stars_data.append(1)
+
+                # update review features
+                arr = line.split()
+                for feature in arr[1:]:
+                    index_cnt_arr = feature.split(':')  # feature index
+                    index = int(index_cnt_arr[0])
+                    cnt = int(index_cnt_arr[1])
+
+                    train_review_row.append(line_num)
+                    train_review_col.append(index)
+                    train_review_data.append(cnt)
+
+            # split into evaluating set
+            else:
+                # update stars
+                stars = int(arr[0])
+                eval_stars_list.append(stars)
+                # star matrix
+                eval_stars_col.append(stars-1)
+                eval_stars_row.append(line_num - train_data_amt)  # shall subtract train data amount from line number
+                eval_stars_data.append(1)
+
+                # update review features
+                arr = line.split()
+                for feature in arr[1:]:
+                    index_cnt_arr = feature.split(':')  # feature index
+                    index = int(index_cnt_arr[0])
+                    cnt = int(index_cnt_arr[1])
+
+                    eval_review_row.append(line_num - train_data_amt)  # shall subtract train data amount from line number
+                    eval_review_col.append(index)
+                    eval_review_data.append(cnt)
+
+            line = f.readline()
+            line_num += 1
+
+    train_M = csr_matrix((train_review_data, (train_review_row, train_review_col)), shape=(train_data_amt, feature_num))
+    eval_M = csr_matrix((eval_review_data, (eval_review_row, eval_review_col)), shape=(line_num - train_data_amt, feature_num))
+    train_stars_M = csr_matrix((train_stars_data, (train_stars_row, train_stars_col)), shape=(train_data_amt, class_num))
+    eval_stars_M = csr_matrix((eval_stars_data, (eval_stars_row, eval_stars_col)), shape=(line_num - train_data_amt, class_num))
+
+    # row = []
+    # col = []
+    # data = []
+    # for i in range(len(review_token_freq_dic_list)):  # each elem d in the list is a dict for one review
+    #     d = review_token_freq_dic_list[i]
+    #     feature_list = list(feature_set)
+    #
+    #     for token, freq in d.iteritems():
+    #         if token in feature_set:
+    #             row.append(i)
+    #             col.append(feature_list.index(token))
+    #             data.append(d[token])
+    # M = csr_matrix((data, (row, col)), shape=(len(review_token_freq_dic_list), len(feature_set)))
+    return train_M, eval_M, train_stars_M, eval_stars_M, eval_stars_list
