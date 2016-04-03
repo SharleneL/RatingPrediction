@@ -36,8 +36,8 @@ def main(argv):
     lmd = 0.01
     alpha = 0.001  # learning rate
     threshold = 10E-7  # stopping criteria
-    gd_method = 'sga'
-    # gd_method = 'bsga'
+    # gd_method = 'sga'
+    gd_method = 'bsga'
     # ******************** / test|real - start / ******************** #
     # batch_size = 10  # test
     batch_size = 100  # real
@@ -62,33 +62,12 @@ def main(argv):
     # ========== / generate files - COMMENTED IF FILES ARE ALREADY GENERATED - END/ ========== #
 
 
-    libsvm_file_path = '../feature_data/small_ctf_libsvm.out'  # hard coded filepath - for efficiency
-    # total_data_amt = 1255353        # hard coded total data amount - real
-    total_data_amt = 10000        # hard coded total data amount - test
+    libsvm_file_path = '../feature_data/ctf_libsvm.out'  # hard coded filepath - for efficiency
+    total_data_amt = 1255353        # hard coded total data amount - real
+    # total_data_amt = 10000        # hard coded total data amount - test
     # generate features
     train_M, eval_M, train_stars_M, eval_stars_M, eval_stars_list = get_feature_M(libsvm_file_path, total_data_amt, eval_data_frac, feature_num, class_num)
     print 'TASK2 - eval_M got & end'
-    # print train_M.shape
-    # print eval_M.shape
-    # print train_stars_M.shape
-    # print eval_stars_M.shape
-
-    # print train_M.toarray()[0][7]
-    # print train_M.toarray()[0][773]
-    # print train_M.toarray()[8][40]
-    # print train_M.toarray()[8][0]
-    # print train_M.toarray()[7][40]
-    # print train_M.toarray()[7][1955]
-    # print train_M.toarray()[9599][240]
-    # print eval_M.toarray()[0][1571]  # line 9601
-    # print eval_M.toarray()[0][914]
-    # print eval_M.toarray()[0][48]
-    # print eval_M.toarray()[2][962]
-    # print eval_M.toarray()[399][142]
-    # print eval_stars_M[0]
-    # print eval_stars_M[1]
-    # print eval_stars_M[2]
-    # print eval_stars_M[3]
 
     # TASK3.1: MODEL DESIGN - LR
     # TRAIN
