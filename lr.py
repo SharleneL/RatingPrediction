@@ -47,7 +47,7 @@ def lr_train_param(x_M, y_M, W, eval_x_M, eval_y_M, lmd, alpha, threshold, metho
             # judge with stopping criteria
             ll_old = cal_ll(eval_x_M, eval_y_M, W, lmd)
             ll_new = cal_ll(eval_x_M, eval_y_M, W_new, lmd)
-            diff = abs(ll_old - ll_new)
+            diff = abs((ll_old - ll_new) / ll_old)
             print 'Round #' + str(i) + ' ll_old:' + str(ll_old) + ' ll_new:' + str(ll_new) + ' DIFF:' + str(diff)
             if diff < threshold:
                 break
@@ -81,7 +81,7 @@ def lr_train_param(x_M, y_M, W, eval_x_M, eval_y_M, lmd, alpha, threshold, metho
             # print 'line 81'
             ll_new = cal_ll(eval_x_M, eval_y_M, W_new, lmd)
             # print 'line 83'
-            diff = abs(ll_old - ll_new)
+            diff = abs((ll_old - ll_new) / ll_old)
             print 'Round #' + str(iter) + ' ll_old:' + str(ll_old) + ' ll_new:' + str(ll_new) + ' DIFF:' + str(diff)
             if diff < threshold:
                 break
@@ -154,9 +154,11 @@ def cal_ll(eval_x_M, eval_y_M,  W, lmd):
     numer = np.exp(eval_x_M * W)  # W: <#feature, #class> => numer: <#batchsize, #class>
     denom = np.sum(numer, axis=1)  # <#batchsize, 1>
     # np.divide(numer.T, denom.T)  # <#class, #batchsize>
-    p_M = numer / denom[:, None]  # <#class, #batchsize>
+    p_M_1 = numer / denom[:, None]  # <#class, #batchsize>
     # p_sum = np.sum(np.multiply(eval_y_M.toarray(), p_M))  # <#batchsize, #batchsize>
-    p_sum = np.sum(np.multiply(eval_y_M.toarray(), p_M))  # <#batchsize, #batchsize>
+    p_M_2 = np.multiply(eval_y_M.toarray(), p_M_1)
+    p_sum = np.sum(np.log(np.sum(p_M_2, axis=1)))
+    # p_sum = np.sum(np.multiply(eval_y_M.toarray(), p_M_2))  # <#batchsize, #batchsize>
     w_len_sum = np.sum(np.square(W))
     ll = p_sum - float(lmd * w_len_sum) / 2
     return ll

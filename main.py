@@ -35,12 +35,12 @@ def main(argv):
     # LR PARAMS
     lmd = 0.01
     alpha = 0.001  # learning rate
-    threshold = 10E-7  # stopping criteria
+    threshold = 10E-6  # stopping criteria
     # gd_method = 'sga'
     gd_method = 'bsga'
     # ******************** / test|real - start / ******************** #
     # batch_size = 10  # test
-    batch_size = 100  # real
+    batch_size = 200  # real
     # ******************** / test|real - end / ******************** #
     pred_method = 'hard'
     # pred_method = 'soft'
