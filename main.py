@@ -73,6 +73,23 @@ def main(argv):
     # print train_stars_M.shape
     # print eval_stars_M.shape
 
+    # print train_M.toarray()[0][7]
+    # print train_M.toarray()[0][773]
+    # print train_M.toarray()[8][40]
+    # print train_M.toarray()[8][0]
+    # print train_M.toarray()[7][40]
+    # print train_M.toarray()[7][1955]
+    # print train_M.toarray()[9599][240]
+    # print eval_M.toarray()[0][1571]  # line 9601
+    # print eval_M.toarray()[0][914]
+    # print eval_M.toarray()[0][48]
+    # print eval_M.toarray()[2][962]
+    # print eval_M.toarray()[399][142]
+    # print eval_stars_M[0]
+    # print eval_stars_M[1]
+    # print eval_stars_M[2]
+    # print eval_stars_M[3]
+
     # TASK3.1: MODEL DESIGN - LR
     # TRAIN
     W_org = np.ones(shape=(feature_num, class_num)) * float(1)/feature_num
