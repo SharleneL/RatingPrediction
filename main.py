@@ -3,7 +3,7 @@ __author__ = 'luoshalin'
 import sys
 import numpy as np
 from preprocess import get_review_list, print_analysis
-from featureExtract import get_feature_M
+from featureExtract import gen_libsvm_file
 from lr import lr_train_param
 from lr import lr_predict
 from evaluate import cal_accuracy
@@ -47,14 +47,16 @@ def main(argv):
 
     print 'START!'
     # TASK1: PREPROCESS - each row of stars_M is a vector.T of corresponding review. only one col in the vector is '1'
-    review_list, stars_list, stars_M = get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac)  # stars_M: <datanum, classnum:5>
+    # review_list, stars_list, stars_M = get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac)  # stars_M: <datanum, classnum:5>
+    review_list, stars_list = get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac)  # stars_M: <datanum, classnum:5>
 
     # print_analysis(review_list, eval_review_list)
     print 'TASK1 - end'
 
     # TASK2: FEATURE DESIGN
     # M = get_feature_M(review_list, feature_method, feature_num)
-    get_feature_M(review_list, stars_list, feature_method, feature_num)
+    libsvm_file_path = gen_libsvm_file(review_list, stars_list, feature_method, feature_num)  # get the file for useful features
+    print libsvm_file_path
     print 'TASK2 - M got'
     eval_M = get_feature_M(eval_review_list, feature_method, feature_num)
     print 'TASK2 - eval_M got & end'

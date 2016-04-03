@@ -9,9 +9,9 @@ from scipy.sparse import *
 def get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac):
     review_list = []  # list of Review obj
     stars_list = []  # list of stars for all reviews
-    stars_row = []
-    stars_col = []
-    stars_data = []
+    # stars_row = []
+    # stars_col = []
+    # stars_data = []
 
     f = open(stopword_fpath)
     stopword_lines = f.readlines()
@@ -44,12 +44,11 @@ def get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac):
             # update reviews
             review_list.append(new_review)
             # update stars
-            # star list
             stars_list.append(review_stars)
-            # star matrix
-            stars_col.append(review_stars-1)
-            stars_row.append(line_num)
-            stars_data.append(1)
+            # # star matrix
+            # stars_col.append(review_stars-1)
+            # stars_row.append(line_num)
+            # stars_data.append(1)
             line = input_f.readline()
             line_num += 1
 
@@ -77,8 +76,10 @@ def get_review_list(stopword_fpath, input_fpath, class_num, eval_data_frac):
     # train_stars_M = csr_matrix((train_stars_data, (train_stars_row, train_stars_col)), shape=(train_data_amt, class_num))
     # eval_stars_M = csr_matrix((eval_stars_data, (eval_stars_row, eval_stars_col)), shape=(line_num - train_data_amt, class_num))
 
-    stars_M = csr_matrix((stars_data, (stars_row, stars_col)), shape=(line_num, class_num))
-    return review_list, stars_list, stars_M
+    # stars_M = csr_matrix((stars_data, (stars_row, stars_col)), shape=(line_num, class_num))
+    # return review_list, stars_list, stars_M
+
+    return review_list, stars_list
 
 
 def print_analysis(review_list, eval_review_list):
