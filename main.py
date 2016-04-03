@@ -18,14 +18,14 @@ def main(argv):
     # input_fpath = sys.argv[1]
     # output_fpath = sys.argv[2]
     # ******************** / test|real - start / ******************** #
-    # input_fpath = '../../resources/data/small/yelp_reviews_train_small_10000.json'  # test
-    input_fpath = '../../resources/data/yelp_reviews_train.json'  # real
+    input_fpath = '../../resources/data/small/yelp_reviews_train_small_10000.json'  # test
+    # input_fpath = '../../resources/data/yelp_reviews_train.json'  # real
     # ******************** / test|real - end / ******************** #
     # output_fpath = '../../resources/data/small/yelp_reviews_train_output.txt'
     stopword_fpath = '../../resources/data/stopword.list'
     # FEATURE EXTRACTION PARAMS
-    # feature_method = 'ctf'
-    feature_method = 'df'
+    feature_method = 'ctf'
+    # feature_method = 'df'
     # ******************** / test|real - start / ******************** #
     # feature_num = 10        # test
     feature_num = 2000    # real
