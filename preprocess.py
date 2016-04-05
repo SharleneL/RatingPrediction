@@ -1,9 +1,9 @@
 __author__ = 'luoshalin'
+# FILE DESCRIPTION: functions for data preprocessing
 
 import json
 import re
 from classes import Review
-from scipy.sparse import *
 
 
 def get_review_list(stopword_fpath, train_input_fpath, test_input_fpath):

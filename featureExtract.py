@@ -1,16 +1,7 @@
 __author__ = 'luoshalin'
+# FILE DESCRIPTION: functions to extract features
 
 from scipy.sparse import *
-
-
-# def get_feature_M(review_list, stars_list, method, feature_num):
-#     print 'featureExtract - 7'
-#     # feature_set, review_token_freq_dic_list = get_feature_set_and_review_freq(review_list, method, feature_num)
-#     get_feature_set_and_review_freq(review_list, stars_list, method, feature_num)
-#     print 'featureExtract - 9'
-#     # M = get_feature_M_helper(feature_set, review_token_freq_dic_list)
-#     print 'featureExtract - 11'
-#     # return M
 
 
 # function to get feature_set and reviews represented by freq dicts
@@ -20,7 +11,6 @@ def gen_libsvm_file(review_list, stars_list, test_review_list, method, feature_n
     test_review_token_freq_dic_list = []  # for test data: list of dicts, each dicts is for one review, containing <token, freq>
     feature_dic = dict()  # dict saves all original features <token, corpus_ctf_cnt / corpus_df_cnt>
 
-    print 'featureExtract - 22'
     if method == 'ctf':
         # training data
         for review in review_list:
@@ -87,11 +77,7 @@ def gen_libsvm_file(review_list, stars_list, test_review_list, method, feature_n
     else:
         print 'ERROR: Invalid feature extraction method: ' + method
 
-    print 'featureExtract - 64'
-
     sorted_feature_list = sorted(feature_dic.items(), key=lambda x: -x[1])
-
-    print 'featureExtract - 68'
 
     for i in range(feature_num):  # 10 for testing, or 2000 for experiment
         feature_str_index_dic[sorted_feature_list[i][0]] = i
@@ -100,10 +86,6 @@ def gen_libsvm_file(review_list, stars_list, test_review_list, method, feature_n
     with open(method+'_top_features.list', 'w') as feature_f:
         for i in range(feature_num):  # 10 for testing, or 2000 for experiment
             feature_f.write(str(sorted_feature_list[i][0]) + '\t' + str(sorted_feature_list[i][1]) + '\n')
-
-    print 'featureExtract - 73'
-
-    # get feature_str_index_dic & review_token_freq_dic_list - next: output useful features to file
 
     train_output_fpath = method + '_libsvm_train'+'.out'
     test_output_fpath = method + '_libsvm_test'+'.out'
@@ -132,14 +114,10 @@ def gen_libsvm_file(review_list, stars_list, test_review_list, method, feature_n
             output_str = output_str.strip() + '\n'
             output_f.write(output_str)
 
-    print 'featureExtract - 89'
-
     return train_output_fpath, test_output_fpath
 
-    # return feature_set, review_token_freq_dic_list
 
 # get the train & eval feature matrix: row - one review, col - token's index in feature dic, value - occurence frequency
-# def get_feature_M(feature_set, review_token_freq_dic_list):
 def get_train_feature_M(libsvm_file_path, total_data_amt, eval_data_frac, feature_num, class_num):
 
     # train SET
@@ -225,6 +203,7 @@ def get_train_feature_M(libsvm_file_path, total_data_amt, eval_data_frac, featur
     return train_M, eval_M, train_stars_M, eval_stars_M, eval_stars_list
 
 
+# generate feautures for test/dev set
 def get_test_feature_M(test_libsvm_file_path, feature_num):
     test_review_row = []
     test_review_col = []

@@ -1,4 +1,5 @@
 __author__ = 'luoshalin'
+# FILE DESCRIPTION: helper classes
 
 
 # class for reviews
